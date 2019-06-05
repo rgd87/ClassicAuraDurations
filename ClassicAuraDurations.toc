@@ -2,6 +2,8 @@
 ## Title: ClassicAuraDurations
 ## Author: d87
 
+Libs\LibStub\LibStub.lua
+Libs\CallbackHandler-1.0\CallbackHandler-1.0.lua
 Libs\LibClassicDurations\LibClassicDurations.xml
 
 code.lua
