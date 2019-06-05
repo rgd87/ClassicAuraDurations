@@ -1,0 +1,7 @@
+## Interface: 11302
+## Title: ClassicAuraDurations
+## Author: d87
+
+Libs\LibClassicDurations\LibClassicDurations.xml
+
+code.lua

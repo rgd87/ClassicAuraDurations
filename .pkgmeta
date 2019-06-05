@@ -1,0 +1,13 @@
+package-as: ClassicAuraDurations
+
+enable-nolib-creation: no
+
+manual-changelog:
+  filename: CHANGELOG
+  markup-type: markdown
+
+externals:
+  Libs/LibClassicDurations:
+    url: https://github.com/rgd87/LibClassicDurations.git
+    tag: master
+
