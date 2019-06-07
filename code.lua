@@ -22,7 +22,7 @@ f:SetScript("OnEvent", function(self, event)
                 -- Handle cooldowns
                 frameCooldown = _G[frameName.."Cooldown"];
                 local durationNew, expirationTimeNew = LibClassicDurations:GetAuraDurationByUnit(self.unit, spellId, caster)
-                if durationNew then
+                if duration == 0 and durationNew then
                     duration = durationNew
                     expirationTime = expirationTimeNew
                 end
@@ -47,7 +47,7 @@ f:SetScript("OnEvent", function(self, event)
                     -- Handle cooldowns
                     frameCooldown = _G[frameName.."Cooldown"];
                     local durationNew, expirationTimeNew = LibClassicDurations:GetAuraDurationByUnit(self.unit, spellId, caster)
-                    if durationNew then
+                    if duration == 0 and durationNew then
                         duration = durationNew
                         expirationTime = expirationTimeNew
                     end
@@ -65,7 +65,7 @@ f:SetScript("OnEvent", function(self, event)
     hooksecurefunc("CompactUnitFrame_UtilSetBuff", function(buffFrame, unit, index, filter)
         local name, icon, count, debuffType, duration, expirationTime, unitCaster, canStealOrPurge, _, spellId, canApplyAura = UnitBuff(unit, index, filter);
         local durationNew, expirationTimeNew = LibClassicDurations:GetAuraDurationByUnit(unit, spellId, unitCaster)
-        if durationNew then
+        if duration == 0 and durationNew then
             duration = durationNew
             expirationTime = expirationTimeNew
         end
@@ -87,7 +87,7 @@ f:SetScript("OnEvent", function(self, event)
         end
 
         local durationNew, expirationTimeNew = LibClassicDurations:GetAuraDurationByUnit(unit, spellId, unitCaster)
-        if durationNew then
+        if duration == 0 and durationNew then
             duration = durationNew
             expirationTime = expirationTimeNew
         end

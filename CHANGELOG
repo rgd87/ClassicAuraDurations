@@ -1,3 +1,8 @@
+### 1.13.3
+
+- LibClassicDurations added support for spells that weren't in nugrunning:
+  Poisons, Blessings, Thorns, Dampen/Amplify, Mortal Strike, Grenades
+
 ### 1.13.2
 
 - updated LibClassicDurations
