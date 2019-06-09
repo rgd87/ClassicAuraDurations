@@ -1,3 +1,14 @@
+### 1.13.7
+
+- added Data versioning
+
+Buds pull request:
+
+- Charge now counts as STUN for DRs
+- added Mace Spec (both Rogue and Warrior)
+- added Charge Stun
+- fixed typos
+
 ### 1.13.6
 
 - fixed Thunder Clap duration
