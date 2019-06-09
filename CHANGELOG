@@ -1,3 +1,9 @@
+### 1.13.6
+
+- fixed Thunder Clap duration
+- fixed Shadow Word Pain Talent spellIDs
+- fixed incorrect Mortal Strike spellID
+
 ### 1.13.5
 
 - updated LibClassicDurations
