@@ -3,7 +3,7 @@ package-as: ClassicAuraDurations
 enable-nolib-creation: no
 
 manual-changelog:
-  filename: CHANGELOG
+  filename: CHANGELOG.md
   markup-type: markdown
 
 externals:
@@ -13,3 +13,6 @@ externals:
     url: https://github.com/rgd87/LibClassicDurations.git
     tag: master
 
+ignore:
+  - CHANGELOG.md
+  - README.md

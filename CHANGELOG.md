@@ -1,3 +1,7 @@
+### 1.13.9
+
+- added/fixed a bunch of spells during AV weekend
+
 ### 1.13.8
 
 - added Kidney Shot and Rupture. When cast by enemies, they are assumed to be 5cp
