@@ -6,60 +6,22 @@ f:SetScript("OnEvent", function(self, event)
     local LibClassicDurations = LibStub("LibClassicDurations")
     LibClassicDurations:RegisterFrame(addon)
 
+    LibClassicDurations.RegisterCallback(addon, "UNIT_BUFF", function(event, unit)
+        TargetFrame_UpdateAuras(TargetFrame)
+    end)
+
+    local AURA_ROW_WIDTH = 122;
+    local TOT_AURA_ROW_WIDTH = 101;
+
+    local largeBuffList = {};
+    local largeDebuffList = {};
+    local function ShouldAuraBeLarge(caster)
+        -- In Classic, all auras will be the same size.
+        return true;
+    end
+
     hooksecurefunc("TargetFrame_UpdateAuras", function(self)
-        local frame, frameName;
-        local frameIcon, frameCount, frameCooldown;
-        local numBuffs = 0;
-        -- local playerIsTarget = UnitIsUnit(PlayerFrame.unit, self.unit);
-        local selfName = self:GetName();
 
-        for i = 1, MAX_TARGET_BUFFS do
-            local buffName, icon, count, debuffType, duration, expirationTime, caster, canStealOrPurge, _ , spellId, _, _, casterIsPlayer, nameplateShowAll = UnitBuff(self.unit, i, nil);
-            if (buffName) then
-                frameName = selfName.."Buff"..(i);
-                frame = _G[frameName];
-
-                -- Handle cooldowns
-                frameCooldown = _G[frameName.."Cooldown"];
-                local durationNew, expirationTimeNew = LibClassicDurations:GetAuraDurationByUnit(self.unit, spellId, caster)
-                if duration == 0 and durationNew then
-                    duration = durationNew
-                    expirationTime = expirationTimeNew
-                end
-
-                CooldownFrame_Set(frameCooldown, expirationTime - duration, duration, duration > 0, true);
-            end
-        end
-
-
-        local numDebuffs = 0;
-        local frameNum = 1;
-        local index = 1;
-
-        local maxDebuffs = self.maxDebuffs or MAX_TARGET_DEBUFFS;
-        while ( frameNum <= maxDebuffs and index <= maxDebuffs ) do
-            local debuffName, icon, count, debuffType, duration, expirationTime, caster, _, _, spellId, _, _, casterIsPlayer, nameplateShowAll = UnitDebuff(self.unit, index, "INCLUDE_NAME_PLATE_ONLY");
-            if ( debuffName ) then
-                if ( TargetFrame_ShouldShowDebuffs(self.unit, caster, nameplateShowAll, casterIsPlayer) ) then
-                    frameName = selfName.."Debuff"..frameNum;
-                    frame = _G[frameName];
-
-                    -- Handle cooldowns
-                    frameCooldown = _G[frameName.."Cooldown"];
-                    local durationNew, expirationTimeNew = LibClassicDurations:GetAuraDurationByUnit(self.unit, spellId, caster)
-                    if duration == 0 and durationNew then
-                        duration = durationNew
-                        expirationTime = expirationTimeNew
-                    end
-					CooldownFrame_Set(frameCooldown, expirationTime - duration, duration, duration > 0, true);
-
-                    frameNum = frameNum + 1;
-                end
-            else
-                break;
-            end
-            index = index + 1;
-        end
     end)
 
     hooksecurefunc("CompactUnitFrame_UtilSetBuff", function(buffFrame, unit, index, filter)
