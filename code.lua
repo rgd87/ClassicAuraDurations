@@ -1,10 +1,22 @@
 local addonName, addon = ...
 
+local db
+
 local f = CreateFrame("Frame")
 f:RegisterEvent("PLAYER_LOGIN")
 f:SetScript("OnEvent", function(self, event)
+    ClassicAuraDurationsDB = ClassicAuraDurationsDB or { portraitIcon = true }
+    db = ClassicAuraDurationsDB
+
+    SLASH_CLASSICAURADURATIONS1= "/cad"
+    SLASH_CLASSICAURADURATIONS2= "/classicauraduration"
+    SlashCmdList["CLASSICAURADURATIONS"] = self.SlashCmd
+
     local LibClassicDurations = LibStub("LibClassicDurations")
     LibClassicDurations:RegisterFrame(addon)
+
+    local LibAuraTypes = LibStub("LibAuraTypes")
+    local LibSpellLocks = LibStub("LibSpellLocks")
 
     LibClassicDurations.RegisterCallback(addon, "UNIT_BUFF", function(event, unit)
         TargetFrame_UpdateAuras(TargetFrame)
@@ -20,6 +32,22 @@ f:SetScript("OnEvent", function(self, event)
         return true;
     end
 
+    local portraitTexture = _G["TargetFramePortrait"];
+
+    local auraCD = CreateFrame("Cooldown", "ClassicAuraDurationsPortraitAura", TargetFrame, "CooldownFrameTemplate")
+    auraCD:SetFrameStrata("BACKGROUND")
+    auraCD:SetDrawEdge(false);
+    -- auraCD:SetHideCountdownNumbers(true);
+    auraCD:SetReverse(true)
+    auraCD:SetSwipeTexture("Interface\\CHARACTERFRAME\\TempPortraitAlphaMaskSmall")
+    auraCD:SetAllPoints(portraitTexture)
+
+    local auraIconTexture = auraCD:CreateTexture(nil, "BORDER", nil, 2)
+    auraIconTexture:SetAllPoints(portraitTexture)
+    -- auraIconTexture:Hide()
+    -- SetPortraitToTexture(auraIconTexture, 136039)
+    auraCD:Hide()
+
     hooksecurefunc("TargetFrame_UpdateAuras", function(self)
         local frame, frameName;
         local frameIcon, frameCount, frameCooldown;
@@ -27,6 +55,13 @@ f:SetScript("OnEvent", function(self, event)
         local playerIsTarget = UnitIsUnit(PlayerFrame.unit, self.unit);
         local selfName = self:GetName();
         local canAssist = UnitCanAssist("player", self.unit);
+
+
+        local unit = self.unit
+        --[[ PORTRAIT AURA ]]
+        local maxPrio = 0
+        local maxPrioFilter
+        local maxPrioIndex = 1
 
         for i = 1, MAX_TARGET_BUFFS do
             local buffName, icon, count, debuffType, duration, expirationTime, caster, canStealOrPurge, _ , spellId, _, _, casterIsPlayer, nameplateShowAll = LibClassicDurations:UnitAura(self.unit, i, "HELPFUL");
@@ -65,6 +100,16 @@ f:SetScript("OnEvent", function(self, event)
                         expirationTime = expirationTimeNew
                     end
                     CooldownFrame_Set(frameCooldown, expirationTime - duration, duration, duration > 0, true);
+
+                    --[[ PORTRAIT AURA ]]
+                    if db.portraitIcon then
+                        local rootSpellID, spellType, prio = LibAuraTypes.GetDebuffInfo(spellId)
+                        if prio and prio > maxPrio then
+                            maxPrio = prio
+                            maxPrioIndex = i
+                            maxPrioFilter = "HELPFUL"
+                        end
+                    end
 
                     -- Show stealable frame if the target is not the current player and the buff is stealable.
                     local frameStealable = _G[frameName.."Stealable"];
@@ -140,6 +185,16 @@ f:SetScript("OnEvent", function(self, event)
                         end
                         CooldownFrame_Set(frameCooldown, expirationTime - duration, duration, duration > 0, true);
 
+                        --[[ PORTRAIT AURA ]]
+                        if db.portraitIcon then
+                            local rootSpellID, spellType, prio = LibAuraTypes.GetDebuffInfo(spellId)
+                            if prio and prio > maxPrio then
+                                maxPrio = prio
+                                maxPrioIndex = index
+                                maxPrioFilter = "HARMFUL"
+                            end
+                        end
+
                         -- set debuff type color
                         if ( debuffType ) then
                             color = DebuffTypeColor[debuffType];
@@ -196,6 +251,39 @@ f:SetScript("OnEvent", function(self, event)
         if ( self.spellbar ) then
             Target_Spellbar_AdjustPosition(self.spellbar);
         end
+
+        --[[ PORTRAIT AURA ]]
+        if db.portraitIcon then
+            local isLocked = LibSpellLocks:GetSpellLockInfo(unit)
+            local PRIO_SILENCE = LibAuraTypes.GetDebuffTypePriority("SILENCE")
+            if isLocked and PRIO_SILENCE > maxPrio then
+                maxPrio = PRIO_SILENCE
+                maxPrioIndex = -1
+            end
+
+            if maxPrio >= PRIO_SILENCE then
+                local name, icon, _, _, duration, expirationTime, _, _,_, spellID
+                if maxPrioIndex == -1 then
+                    spellID, name, icon, duration, expirationTime = LibSpellLocks:GetSpellLockInfo(unit)
+                else
+                    name, icon, _, _, duration, expirationTime, caster, _,_, spellId = UnitAura(unit, maxPrioIndex, maxPrioFilter)
+                    local durationNew, expirationTimeNew = LibClassicDurations:GetAuraDurationByUnit(unit, spellId, caster)
+                    if duration == 0 and durationNew then
+                        duration = durationNew
+                        expirationTime = expirationTimeNew
+                    end
+                end
+                SetPortraitToTexture(auraIconTexture, icon)
+                portraitTexture:Hide()
+                auraCD:SetCooldown(expirationTime-duration, duration)
+                auraCD:Show()
+                -- auraIconTexture:Show()
+            else
+                auraCD:Hide()
+                portraitTexture:Show()
+                -- auraIconTexture:Hide()
+            end
+        end
     end)
 
     hooksecurefunc("CompactUnitFrame_UtilSetBuff", function(buffFrame, unit, index, filter)
@@ -237,3 +325,30 @@ f:SetScript("OnEvent", function(self, event)
         end
     end)
 end)
+
+
+
+
+
+f.Commands = {
+    ["portraiticon"] = function(v)
+        db.portraitIcon = not db.portraitIcon
+    end,
+}
+
+local helpMessage = {
+    "|cff00ff00/cad portraiticon|r",
+}
+
+function f.SlashCmd(msg)
+    local k,v = string.match(msg, "([%w%+%-%=]+) ?(.*)")
+    if not k or k == "help" then
+        print("Usage:")
+        for k,v in ipairs(helpMessage) do
+            print(" - ",v)
+        end
+    end
+    if f.Commands[k] then
+        f.Commands[k](v)
+    end
+end
