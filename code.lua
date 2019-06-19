@@ -22,6 +22,12 @@ f:SetScript("OnEvent", function(self, event)
         TargetFrame_UpdateAuras(TargetFrame)
     end)
 
+    LibSpellLocks.RegisterCallback(addon, "UPDATE_INTERRUPT", function(event, guid)
+        if UnitGUID("target") == guid then
+            TargetFrame_UpdateAuras(TargetFrame)
+        end
+    end)
+
     local AURA_ROW_WIDTH = 122;
     local TOT_AURA_ROW_WIDTH = 101;
 
