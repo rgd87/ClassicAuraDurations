@@ -1,3 +1,9 @@
+### 1.13.10
+
+- added display of enemy buffs (only the ones with known and fixed duration)
+- added all NPC abilities in the game
+- Portrait CC display feature, including spell locks
+
 ### 1.13.9
 
 - added/fixed a bunch of spells during AV weekend
