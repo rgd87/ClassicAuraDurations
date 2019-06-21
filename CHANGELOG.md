@@ -1,7 +1,11 @@
+### 1.13.11
+
+- fixed error when ToT is enabled
+
 ### 1.13.10
 
 - added display of enemy buffs (only the ones with known and fixed duration)
-- added all NPC abilities in the game
+- added a lot of NPC abilities
 - Portrait CC display feature, including spell locks
 
 ### 1.13.9

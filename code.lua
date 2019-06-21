@@ -28,8 +28,15 @@ f:SetScript("OnEvent", function(self, event)
         end
     end)
 
+    local NUM_TOT_AURA_ROWS = 2;
+    local AURA_START_X = 5;
+    local AURA_START_Y = 32;
+    local AURA_OFFSET_Y = 1;
+    local LARGE_AURA_SIZE = 21;
+    local SMALL_AURA_SIZE = 17;
     local AURA_ROW_WIDTH = 122;
     local TOT_AURA_ROW_WIDTH = 101;
+    local NUM_TOT_AURA_ROWS = 2;
 
     local largeBuffList = {};
     local largeDebuffList = {};
