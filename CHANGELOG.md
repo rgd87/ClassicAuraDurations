@@ -1,3 +1,7 @@
+### 1.13.12
+
+- now showing enemy buffs with indefinite duration
+
 ### 1.13.11
 
 - fixed error when ToT is enabled
