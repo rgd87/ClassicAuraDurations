@@ -338,7 +338,13 @@ f:SetScript("OnEvent", function(self, event)
         end
     end)
 
+    --[[
+    -- fuck this, PartyDebuffFrameTemplate doesn't create PartyMemberFrame1Debuff1Cooldown, even on live
+    -- ToT frame does ( and also using this), but it also just spams this function in some OnUpdate probably
+
     hooksecurefunc("RefreshDebuffs", function(frame, unit, numDebuffs, suffix, checkCVar)
+        if not unit:find("party") then return end
+
         local frameName = frame:GetName();
         numDebuffs = numDebuffs or MAX_PARTY_DEBUFFS;
         suffix = suffix or "Debuff";
@@ -351,16 +357,22 @@ f:SetScript("OnEvent", function(self, event)
             local name, icon, count, debuffType, duration, expirationTime, caster, _, _, spellId = UnitDebuff(unit, i, filter);
 
             local debuffName = frameName..suffix..i;
+            print(unit, i, numDebuffs, name, spellId, caster)
             if ( icon and ( SHOW_CASTABLE_DEBUFFS == "0" or not isEnemy or caster == "player" ) ) then
                 -- if we have an icon to show then proceed with setting up the aura
 
+                print(name, spellId, caster)
                 local durationNew, expirationTimeNew = LibClassicDurations:GetAuraDurationByUnit(unit, spellId, caster)
                 if duration == 0 and durationNew then
                     duration = durationNew
                     expirationTime = expirationTimeNew
 
+
+                    local cdname = debuffName.."Cooldown"
                     local coolDown = _G[debuffName.."Cooldown"];
+                    print("got duration", coolDown, frameName, cdname)
                     if ( coolDown ) then
+                        print("setting", coolDown, expirationTime - duration, duration)
                         CooldownFrame_Set(coolDown, expirationTime - duration, duration, true);
                     end
                 end
@@ -368,6 +380,7 @@ f:SetScript("OnEvent", function(self, event)
         end
 
     end)
+    ]]
 end)
 
 
