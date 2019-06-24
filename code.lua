@@ -337,6 +337,37 @@ f:SetScript("OnEvent", function(self, event)
             CooldownFrame_Clear(debuffFrame.cooldown);
         end
     end)
+
+    hooksecurefunc("RefreshDebuffs", function(frame, unit, numDebuffs, suffix, checkCVar)
+        local frameName = frame:GetName();
+        numDebuffs = numDebuffs or MAX_PARTY_DEBUFFS;
+        suffix = suffix or "Debuff";
+        local filter;
+        if ( checkCVar and SHOW_DISPELLABLE_DEBUFFS == "1" and UnitCanAssist("player", unit) ) then
+            filter = "RAID";
+        end
+
+        for i=1, numDebuffs do
+            local name, icon, count, debuffType, duration, expirationTime, caster, _, _, spellId = UnitDebuff(unit, i, filter);
+
+            local debuffName = frameName..suffix..i;
+            if ( icon and ( SHOW_CASTABLE_DEBUFFS == "0" or not isEnemy or caster == "player" ) ) then
+                -- if we have an icon to show then proceed with setting up the aura
+
+                local durationNew, expirationTimeNew = LibClassicDurations:GetAuraDurationByUnit(unit, spellId, caster)
+                if duration == 0 and durationNew then
+                    duration = durationNew
+                    expirationTime = expirationTimeNew
+
+                    local coolDown = _G[debuffName.."Cooldown"];
+                    if ( coolDown ) then
+                        CooldownFrame_Set(coolDown, expirationTime - duration, duration, true);
+                    end
+                end
+            end
+        end
+
+    end)
 end)
 
 
