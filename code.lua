@@ -28,7 +28,6 @@ f:SetScript("OnEvent", function(self, event)
         end
     end)
 
-    local NUM_TOT_AURA_ROWS = 2;
     local AURA_START_X = 5;
     local AURA_START_Y = 32;
     local AURA_OFFSET_Y = 1;
@@ -275,11 +274,11 @@ f:SetScript("OnEvent", function(self, event)
             end
 
             if maxPrio >= PRIO_SILENCE then
-                local name, icon, _, _, duration, expirationTime, _, _,_, spellID
+                local name, icon, _, _, duration, expirationTime, caster, _,_, spellId
                 if maxPrioIndex == -1 then
-                    spellID, name, icon, duration, expirationTime = LibSpellLocks:GetSpellLockInfo(unit)
+                    spellId, name, icon, duration, expirationTime = LibSpellLocks:GetSpellLockInfo(unit)
                 else
-                    name, icon, _, _, duration, expirationTime, caster, _,_, spellId = UnitAura(unit, maxPrioIndex, maxPrioFilter)
+                    name, icon, _, _, duration, expirationTime, caster, _,_, spellId = LibClassicDurations:UnitAura(unit, maxPrioIndex, maxPrioFilter)
                     local durationNew, expirationTimeNew = LibClassicDurations:GetAuraDurationByUnit(unit, spellId, caster)
                     if duration == 0 and durationNew then
                         duration = durationNew
