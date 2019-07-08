@@ -1,3 +1,8 @@
+### 1.13.13
+
+- added GUI and option to toggle enemy buffs
+- enemy buffs now disabled by default
+
 ### 1.13.12
 
 - now showing enemy buffs with indefinite duration
