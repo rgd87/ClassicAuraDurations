@@ -204,10 +204,6 @@ function f.PLAYER_LOGIN(self, event)
     LibAuraTypes = LibStub("LibAuraTypes")
     LibSpellLocks = LibStub("LibSpellLocks")
 
-    LibClassicDurations.RegisterCallback(addon, "UNIT_BUFF", function(event, unit)
-        TargetFrame_UpdateAuras(TargetFrame)
-    end)
-
     LibSpellLocks.RegisterCallback(addon, "UPDATE_INTERRUPT", function(event, guid)
         if UnitGUID("target") == guid then
             TargetFrame_UpdateAuras(TargetFrame)
@@ -236,6 +232,9 @@ function f.PLAYER_LOGIN(self, event)
     if db.hookTargetFrame then
         if db.enemyBuffs then
             hooksecurefunc("TargetFrame_UpdateAuras", f.EnemyBuffsTargetFrameHook)
+            LibClassicDurations.RegisterCallback(addon, "UNIT_BUFF", function(event, unit)
+                TargetFrame_UpdateAuras(TargetFrame)
+            end)
         else
             hooksecurefunc("TargetFrame_UpdateAuras", f.SimpleTargetFrameHook)
         end
