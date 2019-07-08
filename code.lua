@@ -2,10 +2,52 @@ local addonName, addon = ...
 
 local db
 
+local function SetupDefaults(t, defaults)
+    for k,v in pairs(defaults) do
+        if type(v) == "table" then
+            if t[k] == nil then
+                t[k] = CopyTable(v)
+            else
+                SetupDefaults(t[k], v)
+            end
+        else
+            if t[k] == nil then t[k] = v end
+        end
+    end
+end
+local function RemoveDefaults(t, defaults)
+    for k, v in pairs(defaults) do
+        if type(t[k]) == 'table' and type(v) == 'table' then
+            RemoveDefaults(t[k], v)
+            if next(t[k]) == nil then
+                t[k] = nil
+            end
+        elseif t[k] == v then
+            t[k] = nil
+        end
+    end
+    return t
+end
+
+local defaults = {
+    portraitIcon = true,
+    enemyBuffs = false,
+}
+
 local f = CreateFrame("Frame")
+f:SetScript("OnEvent", function(self, event, ...)
+	return self[event](self, event, ...)
+end)
+
+f:RegisterEvent("PLAYER_LOGOUT")
+function f.PLAYER_LOGOUT(self, event)
+    RemoveDefaults(ClassicAuraDurationsDB, defaults)
+end
+
 f:RegisterEvent("PLAYER_LOGIN")
-f:SetScript("OnEvent", function(self, event)
-    ClassicAuraDurationsDB = ClassicAuraDurationsDB or { portraitIcon = true }
+function f.PLAYER_LOGIN(self, event)
+    ClassicAuraDurationsDB = ClassicAuraDurationsDB or {}
+    SetupDefaults(ClassicAuraDurationsDB, defaults)
     db = ClassicAuraDurationsDB
 
     SLASH_CLASSICAURADURATIONS1= "/cad"
@@ -380,15 +422,92 @@ f:SetScript("OnEvent", function(self, event)
 
     end)
     ]]
-end)
+
+    local loader = CreateFrame('Frame', nil, InterfaceOptionsFrame)
+        loader:SetScript('OnShow', function(self)
+            self:SetScript('OnShow', nil)
+
+            if not f.optionsPanel then
+                f.optionsPanel = f:CreateGUI("ClassicAuraDurations")
+                InterfaceOptions_AddCategory(f.optionsPanel);
+            end
+        end)
+end
 
 
 
+local function MakeCheckbox(name, parent)
+    local cb = CreateFrame("CheckButton", name, parent, "UICheckButtonTemplate")
+    cb:SetWidth(25)
+    cb:SetHeight(25)
+    cb:Show()
+
+    local cblabel = cb:CreateFontString(nil, "OVERLAY")
+    cblabel:SetFontObject("GameFontHighlight")
+    cblabel:SetPoint("LEFT", cb,"RIGHT", 5,0)
+    cb.label = cblabel
+    return cb
+end
+
+function f:CreateGUI(name, parent)
+    local frame = CreateFrame("Frame", nil, InterfaceOptionsFrame)
+    frame:Hide()
+
+    frame.parent = parent
+    frame.name = name
+
+    frame:SetScript("OnShow", function(self)
+        self.content.enemyBuffs:SetChecked(db.enemyBuffs)
+        self.content.portraitIcon:SetChecked(db.portraitIcon)
+    end)
+    -- frame:SetScript("OnHide", function(self) print("onHide") end)
+
+    local label = frame:CreateFontString(nil, "OVERLAY", "GameFontNormalLarge")
+	label:SetPoint("TOPLEFT", 10, -15)
+	label:SetPoint("BOTTOMRIGHT", frame, "TOPRIGHT", 10, -45)
+	label:SetJustifyH("LEFT")
+    label:SetJustifyV("TOP")
+
+    label:SetText(name)
+
+	local content = CreateFrame("Frame", "CADOptionsContent", frame)
+	content:SetPoint("TOPLEFT", 10, -10)
+    content:SetPoint("BOTTOMRIGHT", -10, 10)
+
+    frame.content = content
+
+    local warning = content:CreateFontString(nil, "OVERLAY")
+    warning:SetFontObject("GameFontHighlightSmall")
+    warning:SetPoint("TOPLEFT", 10, -40)
+    warning:SetText("If you're getting 'Script ran too long' errors consider turning enemy buffs off or using non-standard unitframes")
+
+    local ebt = MakeCheckbox("CADEnemyBuffsCheckbox", content)
+    ebt.label:SetText("Show Enemy Buffs")
+    ebt:SetPoint("TOPLEFT", 10, -60)
+    content.enemyBuffs = ebt
+    ebt:SetScript("OnClick",function(self,button)
+        f.Commands.enemybuffs()
+    end)
+
+    local pit = MakeCheckbox("CADEnemyBuffsCheckbox", content)
+    pit.label:SetText("Show Portrait Icon")
+    pit:SetPoint("TOPLEFT", 10, -90)
+    content.portraitIcon = pit
+    pit:SetScript("OnClick",function(self,button)
+        f.Commands.portraiticon()
+    end)
+
+    return frame
+end
 
 
 f.Commands = {
     ["portraiticon"] = function(v)
         db.portraitIcon = not db.portraitIcon
+    end,
+    ["enemybuffs"] = function(v)
+        db.enemyBuffs = not db.enemyBuffs
+        ReloadUI()
     end,
 }
 
