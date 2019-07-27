@@ -1,3 +1,7 @@
+### 1.13.15
+
+- added a bunch of engineering trinkets, Skull of Impending Doom etc
+
 ### 1.13.13
 
 - added GUI and option to toggle enemy buffs
