@@ -1,3 +1,7 @@
+### 1.13.19
+
+- verbose portait icon checkbox
+
 ### 1.13.16
 
 - new version with revamped LCD after blizzard crippled combat log during august stress test
