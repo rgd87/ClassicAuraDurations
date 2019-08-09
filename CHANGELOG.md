@@ -1,3 +1,7 @@
+### 1.13.16
+
+- new version with revamped LCD after blizzard crippled combat log during august stress test
+
 ### 1.13.15
 
 - added a bunch of engineering trinkets, Skull of Impending Doom etc
