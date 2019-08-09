@@ -42,6 +42,7 @@ local defaults = {
     portraitIcon = true,
     enemyBuffs = false,
     hookTargetFrame = true,
+    verbosePortraitIcon = false,
 }
 
 -- Redefining blizzard consts
@@ -68,7 +69,9 @@ local UpdatePortraitIcon = function(unit, maxPrio, maxPrioIndex, maxPrioFilter)
     local originalPortrait = auraCD.originalPortrait
 
     local isLocked = LibSpellLocks:GetSpellLockInfo(unit)
-    local PRIO_SILENCE = LibAuraTypes.GetDebuffTypePriority("SILENCE")
+
+    local CUTOFF_AURA_TYPE = db.verbosePortraitIcon and "SPEED_BOOST" or "SILENCE"
+    local PRIO_SILENCE = LibAuraTypes.GetDebuffTypePriority(CUTOFF_AURA_TYPE)
     if isLocked and PRIO_SILENCE > maxPrio then
         maxPrio = PRIO_SILENCE
         maxPrioIndex = -1
@@ -360,6 +363,7 @@ function f:CreateGUI(name, parent)
         self.content.enemyBuffs:SetChecked(db.enemyBuffs)
         self.content.portraitIcon:SetChecked(db.portraitIcon)
         self.content.hookTargetFrame:SetChecked(db.hookTargetFrame)
+        self.content.verbosePortraitIcon:SetChecked(db.verbosePortraitIcon)
     end)
     -- frame:SetScript("OnHide", function(self) print("onHide") end)
 
@@ -406,6 +410,14 @@ function f:CreateGUI(name, parent)
         f.Commands.hooktarget()
     end)
 
+    local vpi = MakeCheckbox(nil, content)
+    vpi.label:SetText("Verbose Portrait Icon")
+    vpi:SetPoint("TOPLEFT", 10, -150)
+    content.verbosePortraitIcon = vpi
+    vpi:SetScript("OnClick",function(self,button)
+        f.Commands.verboseicon()
+    end)
+
     return frame
 end
 
@@ -413,6 +425,9 @@ end
 f.Commands = {
     ["portraiticon"] = function(v)
         db.portraitIcon = not db.portraitIcon
+    end,
+    ["verboseicon"] = function(v)
+        db.verbosePortraitIcon = not db.verbosePortraitIcon
     end,
     ["enemybuffs"] = function(v)
         db.enemyBuffs = not db.enemyBuffs
