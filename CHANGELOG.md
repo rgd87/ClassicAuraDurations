@@ -1,3 +1,7 @@
+### 1.13.20
+
+- creature spells
+
 ### 1.13.19
 
 - verbose portait icon checkbox
