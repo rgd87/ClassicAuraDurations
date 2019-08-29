@@ -1,3 +1,7 @@
+### 1.13.22
+
+- Maybe restored Curse of Agony timer on chinese client
+
 ### 1.13.21
 
 - fixed rare error
