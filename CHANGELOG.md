@@ -1,3 +1,7 @@
+### 1.13.23
+
+- Fixed Curse of Agony timer on Chinese client
+
 ### 1.13.22
 
 - Maybe restored Curse of Agony timer on chinese client
