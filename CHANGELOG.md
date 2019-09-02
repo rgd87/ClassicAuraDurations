@@ -1,3 +1,7 @@
+### 1.13.24
+
+- Enemy Buffs are now working again
+
 ### 1.13.23
 
 - Fixed Curse of Agony timer on Chinese client
