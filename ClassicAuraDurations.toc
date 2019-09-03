@@ -3,6 +3,8 @@
 ## Author: d87
 ## SavedVariables: ClassicAuraDurationsDB
 
+## X-WoWI-ID: 25006
+
 Libs\LibStub\LibStub.lua
 Libs\CallbackHandler-1.0\CallbackHandler-1.0.lua
 Libs\LibClassicDurations\LibClassicDurations.xml

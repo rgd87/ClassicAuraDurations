@@ -1,3 +1,7 @@
+### 1.13.25
+
+- Timers for long raid buffs, but only if casted by player
+
 ### 1.13.24
 
 - Enemy Buffs are now working again
