@@ -1,3 +1,14 @@
+### 1.13.26
+
+- Sunder Armor 5 stack refresh fix
+- Because they can't be fixed removed these timers:
+    - Fire Vulnerability
+    - Winter's Chill
+    - Shadow Weaving
+    - Shadow Vulnerability
+    - Deadly Poison
+    - Wound Poison
+
 ### 1.13.25
 
 - Timers for long raid buffs, but only if casted by player
