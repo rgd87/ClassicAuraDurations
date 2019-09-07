@@ -90,12 +90,10 @@ local UpdatePortraitIcon = function(unit, maxPrio, maxPrioIndex, maxPrioFilter)
             end
         end
         SetPortraitToTexture(auraCD.texture, icon)
-        originalPortrait:Hide()
         auraCD:SetCooldown(expirationTime-duration, duration)
         auraCD:Show()
     else
         auraCD:Hide()
-        originalPortrait:Show()
     end
 end
 
@@ -216,7 +214,8 @@ function f.PLAYER_LOGIN(self, event)
     local originalPortrait = _G["TargetFramePortrait"];
 
     local auraCD = CreateFrame("Cooldown", "ClassicAuraDurationsPortraitAura", TargetFrame, "CooldownFrameTemplate")
-    auraCD:SetFrameStrata("BACKGROUND")
+    auraCD:SetFrameStrata("LOW")
+    auraCD:SetFrameLevel(1)
     auraCD:SetDrawEdge(false);
     -- auraCD:SetHideCountdownNumbers(true);
     auraCD:SetReverse(true)

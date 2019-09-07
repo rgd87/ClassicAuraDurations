@@ -1,3 +1,9 @@
+### 1.13.27
+
+- not touching default portrait at all now
+- Pyroblast timer
+- Fireball timers now stack
+
 ### 1.13.26
 
 - Sunder Armor 5 stack refresh fix
