@@ -1,3 +1,8 @@
+### 1.13.28
+
+- Fixed Rupture and Kidney Shot timers
+- Taunt stacking
+
 ### 1.13.27
 
 - not touching default portrait at all now
