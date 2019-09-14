@@ -1,3 +1,7 @@
+### 1.13.29
+
+- Fixed Rupture and Kidney Shot differently
+
 ### 1.13.28
 
 - Fixed Rupture and Kidney Shot timers
