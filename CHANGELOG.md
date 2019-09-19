@@ -1,3 +1,8 @@
+### 1.13.30
+
+- Added Tooltips for GUI
+- Personal debuffs now larger than the rest in full replacement mode
+
 ### 1.13.29
 
 - Fixed Rupture and Kidney Shot differently
