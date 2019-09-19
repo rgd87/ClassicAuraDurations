@@ -365,6 +365,20 @@ local function MakeCheckbox(name, parent)
     return cb
 end
 
+local tooltipOnEnter = function(self, event)
+    GameTooltip:SetOwner(self, "ANCHOR_TOPLEFT")
+    GameTooltip:SetText(self.tooltipText, nil, nil, nil, nil, false);
+    GameTooltip:Show();
+end
+local tooltipOnLeave = function(self, event)
+    GameTooltip:Hide();
+end
+local function AddTooltip(widget, tooltipText)
+    widget.tooltipText = tooltipText
+    widget:SetScript("OnEnter", tooltipOnEnter)
+    widget:SetScript("OnLeave", tooltipOnLeave)
+end
+
 function f:CreateGUI(name, parent)
     local frame = CreateFrame("Frame", nil, InterfaceOptionsFrame)
     frame:Hide()
@@ -394,34 +408,40 @@ function f:CreateGUI(name, parent)
 
     frame.content = content
 
-    local warning = content:CreateFontString(nil, "OVERLAY")
-    warning:SetFontObject("GameFontHighlightSmall")
-    warning:SetPoint("TOPLEFT", 10, -40)
-    warning:SetText("If you're getting 'Script ran too long' errors consider turning enemy buffs off or switching to non-standard unitframes")
-
-    local ebt = MakeCheckbox(nil, content)
-    ebt.label:SetText("Show Enemy Buffs")
-    ebt:SetPoint("TOPLEFT", 10, -60)
-    content.enemyBuffs = ebt
-    ebt:SetScript("OnClick",function(self,button)
-        f.Commands.enemybuffs()
-    end)
-
-    local pit = MakeCheckbox(nil, content)
-    pit.label:SetText("Show Portrait Icon")
-    pit:SetPoint("TOPLEFT", 10, -90)
-    content.portraitIcon = pit
-    pit:SetScript("OnClick",function(self,button)
-        f.Commands.portraiticon()
-    end)
+    -- local warning = content:CreateFontString(nil, "OVERLAY")
+    -- warning:SetFontObject("GameFontHighlightSmall")
+    -- warning:SetPoint("TOPLEFT", 10, -40)
+    -- warning:SetText("If you're getting 'Script ran too long' errors consider turning enemy buffs off or switching to non-standard unitframes")
 
     local htt = MakeCheckbox(nil, content)
     htt.label:SetText("Hook Target Frame")
-    htt:SetPoint("TOPLEFT", 10, -120)
+    htt:SetPoint("TOPLEFT", 10, -60)
     content.hookTargetFrame = htt
     htt:SetScript("OnClick",function(self,button)
         f.Commands.hooktarget()
     end)
+    AddTooltip(htt, "Enable aura durations on target frame")
+
+    local ebt = MakeCheckbox(nil, content)
+    ebt.label:SetText("Full Aura Replacement")
+    ebt:SetPoint("TOPLEFT", 10, -90)
+    content.enemyBuffs = ebt
+    ebt:SetScript("OnClick",function(self,button)
+        f.Commands.enemybuffs()
+    end)
+    AddTooltip(ebt, [=[As opposed to only adding cooldown swipes, completely duplicates default aura handling.
+This allows to display large personal debuffs and some enemy buffs.
+May cause 'Script ran too long errors'
+]=])
+
+    local pit = MakeCheckbox(nil, content)
+    pit.label:SetText("Show Portrait Icon")
+    pit:SetPoint("TOPLEFT", 10, -120)
+    content.portraitIcon = pit
+    pit:SetScript("OnClick",function(self,button)
+        f.Commands.portraiticon()
+    end)
+    AddTooltip(pit, "Show CCs and other effects in the portrait")
 
     local vpi = MakeCheckbox(nil, content)
     vpi.label:SetText("Verbose Portrait Icon")
@@ -430,6 +450,7 @@ function f:CreateGUI(name, parent)
     vpi:SetScript("OnClick",function(self,button)
         f.Commands.verboseicon()
     end)
+    AddTooltip(vpi, "Lowers the threshold of effects for portrait display. Will include slows and anything remotely important")
 
     return frame
 end
