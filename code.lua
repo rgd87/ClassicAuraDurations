@@ -57,10 +57,24 @@ local NUM_TOT_AURA_ROWS = 2;
 
 local largeBuffList = {};
 local largeDebuffList = {};
+
+local PLAYER_UNITS = {
+	player = true,
+	pet = true,
+};
 local function ShouldAuraBeLarge(caster)
-    -- In Classic, all auras will be the same size.
-    return true;
+    if not caster then
+		return false;
+	end
+
+	for token, value in pairs(PLAYER_UNITS) do
+		if UnitIsUnit(caster, token) then
+			return value;
+		end
+	end
 end
+
+
 
 
 
