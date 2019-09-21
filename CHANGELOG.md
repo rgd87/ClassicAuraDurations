@@ -1,3 +1,8 @@
+### 1.13.31
+
+- Fixed Healing Way
+- Returned Shadow Weaving, Fire Vulnerability, but only visible for SPs and Fire Mages
+
 ### 1.13.30
 
 - Added Tooltips for GUI
