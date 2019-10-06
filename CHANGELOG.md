@@ -1,3 +1,7 @@
+### 1.13.34
+
+- Improved Blizzard timer
+
 ### 1.13.33
 
 - Arcane Brilliance duration is 60m now
