@@ -1,3 +1,7 @@
+### 1.13.35
+
+- Long CC PvP durations set to 20s.
+
 ### 1.13.34
 
 - Improved Blizzard timer
