@@ -1,3 +1,9 @@
+### 1.13.36
+
+- Kidney, Cheap Shot, Scatter DR changes
+- Indefinite duration buffs like Stances and Paladin's Auras now should appear in enemy buffs
+- Mind Blast and Scorch damage no longer refresh Vulnerability if debuff was resisted
+
 ### 1.13.35
 
 - Long CC PvP durations set to 20s.
