@@ -1,3 +1,7 @@
+### 1.13.37
+
+- bugfix for infinite auras
+
 ### 1.13.36
 
 - Kidney, Cheap Shot, Scatter DR changes
