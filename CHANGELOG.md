@@ -1,3 +1,7 @@
+### 1.13.38
+
+- Many long buffs should show duration now even when not casted player
+
 ### 1.13.37
 
 - bugfix for infinite auras
