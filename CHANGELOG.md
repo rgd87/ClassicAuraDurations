@@ -1,4 +1,4 @@
-### 1.13.39
+### 1.13.40
 
 - Many long buffs should show duration now even when not casted player
 - Not resetting timers on Hunter deaths
