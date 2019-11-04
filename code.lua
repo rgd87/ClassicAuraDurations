@@ -44,6 +44,7 @@ local defaults = {
     enemyBuffs = false,
     hookTargetFrame = true,
     verbosePortraitIcon = false,
+    largePersonalDebuffs = false,
 }
 
 -- Redefining blizzard consts
@@ -63,7 +64,9 @@ local PLAYER_UNITS = {
 	player = true,
 	pet = true,
 };
-local function ShouldAuraBeLarge(caster)
+
+
+local function ShouldAuraBeLargePersonalDebuffs(caster)
     if not caster then
 		return false;
 	end
@@ -75,7 +78,11 @@ local function ShouldAuraBeLarge(caster)
 	end
 end
 
+local function ShouldAuraBeLargeAlways(caster)
+    return true
+end
 
+local ShouldAuraBeLarge = ShouldAuraBeLargeAlways
 
 
 
@@ -225,6 +232,8 @@ function f.PLAYER_LOGIN(self, event)
             TargetFrame_UpdateAuras(TargetFrame)
         end
     end)
+
+    ShouldAuraBeLarge = db.largePersonalDebuffs and ShouldAuraBeLargePersonalDebuffs or ShouldAuraBeLargeAlways
 
     local makePortraitOverlay = function(frame, portraitGlobalName)
         local originalPortrait = _G[portraitGlobalName];
@@ -436,6 +445,9 @@ function f:CreateGUI(name, parent)
         self.content.portraitIcon:SetChecked(db.portraitIcon)
         self.content.hookTargetFrame:SetChecked(db.hookTargetFrame)
         self.content.verbosePortraitIcon:SetChecked(db.verbosePortraitIcon)
+        self.content.playerPortraitIcon:SetChecked(db.playerPortraitIcon)
+        self.content.largePersonalDebuffs:SetChecked(db.largePersonalDebuffs)
+        self.content.largePersonalDebuffs:UpdateDisabled()
     end)
     -- frame:SetScript("OnHide", function(self) print("onHide") end)
 
@@ -473,6 +485,7 @@ function f:CreateGUI(name, parent)
     content.enemyBuffs = ebt
     ebt:SetScript("OnClick",function(self,button)
         f.Commands.enemybuffs()
+        self.content.largePersonalDebuffs:UpdateDisabled()
     end)
     AddTooltip(ebt, [=[As opposed to only adding cooldown swipes, completely duplicates default aura handling.
 This allows to display large personal debuffs and some enemy buffs.
@@ -500,11 +513,30 @@ May cause 'Script ran too long errors'
     local ppi = MakeCheckbox(nil, content)
     ppi.label:SetText("Player Portrait Icon")
     ppi:SetPoint("TOPLEFT", 10, -180)
-    content.verbosePortraitIcon = ppi
+    content.playerPortraitIcon = ppi
     ppi:SetScript("OnClick",function(self,button)
         f.Commands.playericon()
     end)
     AddTooltip(ppi, "Show icon on Player Frame")
+
+    local lpd = MakeCheckbox(nil, content)
+    lpd.label:SetText("Large Personal Debuffs")
+    lpd:SetPoint("TOPLEFT", 10, -210)
+    content.largePersonalDebuffs = lpd
+    lpd:SetScript("OnClick",function(self,button)
+        f.Commands.largepersonal()
+    end)
+    lpd.UpdateDisabled = function(self)
+        if not db.enemyBuffs then
+            self:Disable()
+            self.label:SetTextColor(0.5, 0.5, 0.5)
+        else
+            self:Enable()
+            self.label:SetTextColor(1,1,1)
+        end
+    end
+    AddTooltip(lpd, "Auras that aren't casted by player will be smaller. Lower OmniCC size threshold to still see numeric display on them.")
+    ebt.content = content
 
     return frame
 end
@@ -519,6 +551,10 @@ f.Commands = {
     end,
     ["verboseicon"] = function(v)
         db.verbosePortraitIcon = not db.verbosePortraitIcon
+    end,
+    ["largepersonal"] = function(v)
+        db.largePersonalDebuffs = not db.largePersonalDebuffs
+        ShouldAuraBeLarge = db.largePersonalDebuffs and ShouldAuraBeLargePersonalDebuffs or ShouldAuraBeLargeAlways
     end,
     ["enemybuffs"] = function(v)
         db.enemyBuffs = not db.enemyBuffs
@@ -623,7 +659,7 @@ f.EnemyBuffsTargetFrameHook = function(self)
 
                 -- set the buff to be big if the buff is cast by the player or his pet
                 numBuffs = numBuffs + 1;
-                largeBuffList[numBuffs] = ShouldAuraBeLarge(caster);
+                largeBuffList[numBuffs] = true--ShouldAuraBeLarge(caster);
 
                 frame:ClearAllPoints();
                 frame:Show();
