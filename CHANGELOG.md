@@ -1,3 +1,12 @@
+### 1.13.42
+
+- Added Winer's Chill, visible if talented
+- LibAuraTypes update, separate aura priorities for enemies and allies
+
+### 1.13.41
+
+- Large Personal Debuffs option, only available with Full Aura Replacement enabled
+
 ### 1.13.40
 
 - Many long buffs should show duration now even when not casted player
