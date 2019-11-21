@@ -1,3 +1,7 @@
+### 1.13.43
+
+- LCD Update
+
 ### 1.13.42
 
 - Added Winer's Chill, visible if talented
