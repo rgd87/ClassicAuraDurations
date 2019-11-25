@@ -1,3 +1,7 @@
+### 1.13.44
+
+- Fixed Shadow Weaving debuff conlicting with Warlock Shadow Vulnerability
+
 ### 1.13.43
 
 - LCD Update
