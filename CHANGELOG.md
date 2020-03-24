@@ -1,5 +1,6 @@
-### 1.13.51
+### 1.13.52
 
+- ToC Update for 1.13.4
 - Rollback Sunder Armor refreshes if it ended up missing
 
 ### 1.13.50
