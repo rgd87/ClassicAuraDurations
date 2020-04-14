@@ -1,3 +1,7 @@
+### 1.13.55
+
+- Re-release with updated LCD
+
 ### 1.13.54
 
 - Set bonus tracking
