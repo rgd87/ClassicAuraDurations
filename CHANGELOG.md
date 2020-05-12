@@ -1,3 +1,7 @@
+### 1.13.56
+
+- LCD Update
+
 ### 1.13.55
 
 - Re-release with updated LCD
