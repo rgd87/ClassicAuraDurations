@@ -1,3 +1,8 @@
+### 1.13.59
+
+- ToC Update
+- Fire Vulnerability is refreshed from anyone's scorch even if they don't have a talent
+
 ### 1.13.58
 
 - Fire Vulnerability stack now work together with Ignite stacks
