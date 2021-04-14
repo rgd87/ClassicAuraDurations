@@ -120,4 +120,6 @@ globals = {
     "TargetFrame_UpdateBuffAnchor",
     "TargetFrame_UpdateDebuffAnchor",
     "Target_Spellbar_AdjustPosition",
+    "UnitExists",
+    "UnitReaction",
 }
