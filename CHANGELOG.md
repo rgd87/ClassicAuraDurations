@@ -1,3 +1,8 @@
+### 1.13.62
+
+- BCC compatiblity
+- Updated LCD to include Chronobooned spell IDs
+
 ### 1.13.61
 
 - Ignite extension changes
