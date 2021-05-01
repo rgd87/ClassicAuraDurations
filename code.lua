@@ -376,7 +376,7 @@ function f:UNIT_AURA(event, unit)
         if unit == "target" and not db.portraitIcon then return end
 
         local targetType = "ALLY"
-        if unit == "target" and UnitReaction(unit, "player") < 4 then
+        if unit == "target" and (UnitReaction(unit, "player") or 0) < 4 then
             targetType = "ENEMY"
         end
 
