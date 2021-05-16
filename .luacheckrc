@@ -122,4 +122,5 @@ globals = {
     "Target_Spellbar_AdjustPosition",
     "UnitExists",
     "UnitReaction",
+    "GetBuildInfo",
 }

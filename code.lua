@@ -11,6 +11,8 @@ f:SetScript("OnEvent", function(self, event, ...)
 	return self[event](self, event, ...)
 end)
 
+local APILevel = math.floor(select(4,GetBuildInfo())/10000)
+
 
 local function SetupDefaults(t, defaults)
     for k,v in pairs(defaults) do
@@ -449,13 +451,15 @@ function f:CreateGUI(name, parent)
     frame.name = name
 
     frame:SetScript("OnShow", function(self)
-        self.content.enemyBuffs:SetChecked(db.enemyBuffs)
         self.content.portraitIcon:SetChecked(db.portraitIcon)
-        self.content.hookTargetFrame:SetChecked(db.hookTargetFrame)
         self.content.verbosePortraitIcon:SetChecked(db.verbosePortraitIcon)
         self.content.playerPortraitIcon:SetChecked(db.playerPortraitIcon)
-        self.content.largePersonalDebuffs:SetChecked(db.largePersonalDebuffs)
-        self.content.largePersonalDebuffs:UpdateDisabled()
+        if APILevel == 1 then
+            self.content.enemyBuffs:SetChecked(db.enemyBuffs)
+            self.content.hookTargetFrame:SetChecked(db.hookTargetFrame)
+            self.content.largePersonalDebuffs:SetChecked(db.largePersonalDebuffs)
+            self.content.largePersonalDebuffs:UpdateDisabled()
+        end
     end)
     -- frame:SetScript("OnHide", function(self) print("onHide") end)
 
@@ -478,6 +482,7 @@ function f:CreateGUI(name, parent)
     -- warning:SetPoint("TOPLEFT", 10, -40)
     -- warning:SetText("If you're getting 'Script ran too long' errors consider turning enemy buffs off or switching to non-standard unitframes")
 
+    if APILevel == 1 then
     local htt = MakeCheckbox(nil, content)
     htt.label:SetText("Hook Target Frame")
     htt:SetPoint("TOPLEFT", 10, -60)
@@ -499,6 +504,8 @@ function f:CreateGUI(name, parent)
 This allows to display large personal debuffs and some enemy buffs.
 May cause 'Script ran too long errors'
 ]=])
+    ebt.content = content
+    end
 
     local pit = MakeCheckbox(nil, content)
     pit.label:SetText("Show Portrait Icon")
@@ -527,6 +534,7 @@ May cause 'Script ran too long errors'
     end)
     AddTooltip(ppi, "Show icon on Player Frame")
 
+    if APILevel == 1 then
     local lpd = MakeCheckbox(nil, content)
     lpd.label:SetText("Large Personal Debuffs")
     lpd:SetPoint("TOPLEFT", 10, -210)
@@ -544,7 +552,8 @@ May cause 'Script ran too long errors'
         end
     end
     AddTooltip(lpd, "Auras that aren't casted by player will be smaller. Lower OmniCC size threshold to still see numeric display on them.")
-    ebt.content = content
+    end
+
 
     return frame
 end
