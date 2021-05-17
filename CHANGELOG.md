@@ -1,3 +1,12 @@
+### 1.13.65
+
+- Fixed outdated LibSpellLocks issue on BCC
+
+### 1.13.64
+
+- BCC compatible tocs
+- Disabled checkboxes for features exclusive to Vanilla Classic
+
 ### 1.13.62
 
 - BCC compatiblity
