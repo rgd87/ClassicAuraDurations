@@ -1,3 +1,8 @@
+### 1.14.1
+
+- Updated TOC
+- Fixed some spell priorities
+
 ### 1.13.65
 
 - Fixed outdated LibSpellLocks issue on BCC
