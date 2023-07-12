@@ -355,7 +355,7 @@ end
     end)
     ]]
 
-    local loader = CreateFrame('Frame', nil, InterfaceOptionsFrame)
+    local loader = CreateFrame('Frame', nil, SettingsPanel or InterfaceOptionsFrame)
         loader:SetScript('OnShow', function(self)
             self:SetScript('OnShow', nil)
 

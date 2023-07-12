@@ -110,6 +110,7 @@ globals = {
     "PlayerFrame",
     "CooldownFrame_Clear",
     "InterfaceOptionsFrame",
+    "SettingsPanel",
     "InterfaceOptions_AddCategory",
     "UnitAura",
     "GameTooltip",
