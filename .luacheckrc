@@ -124,4 +124,5 @@ globals = {
     "UnitExists",
     "UnitReaction",
     "GetBuildInfo",
+    "Settings",
 }
